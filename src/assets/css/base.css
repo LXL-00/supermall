@@ -2,13 +2,13 @@
 
 /* :root就是获取根元素HTML */
 /* --colo-text这些是定义变量的意思，在之后要用这个变量值时，可以直接var（变量名） */
-:root{
-  --color-text:#666;
-  --color-high-text:#ff5777;
-  --color-tint:#ff8198;
-  --color-background:#fff;
-  --font-size:14px;
-  --line-height:1.5;
+:root {
+  --color-text: #666;
+  --color-high-text: #ff5777;
+  --color-tint: #ff8198;
+  --color-background: #fff;
+  --font-size: 14px;
+  --line-height: 1.5;
 }
 
 /* ::before与::after是伪元素（虚拟节点），主要是为了在css渲染中向元素逻辑上的头部和尾部添加内容，必须和content属性结合使用*/
