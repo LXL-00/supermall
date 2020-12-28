@@ -46,6 +46,6 @@
 <style>
 .homeswiper{
   width: 100%;
-  /* height: 20px; */
+  height: 15%;
 }
 </style>

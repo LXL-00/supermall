@@ -15,7 +15,7 @@ export default {
 <style scoped>
 .nav-bar{
   display: flex;
-  height: 44px;
+  height: 7.5%;
   line-height: 44px;
   text-align: center;
   /* box-shadow: 阴影水平偏移值 阴影垂直偏移值 阴影模糊值 颜色; */
