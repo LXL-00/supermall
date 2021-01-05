@@ -28,6 +28,8 @@ export default {
   methods:{
     itemclick(index){
       this.currentindex=index;
+      //将自己与外部联系，需要将自己的事件发出去
+      this.$emit('tabcontrolclick',index);
     }
   }
 }

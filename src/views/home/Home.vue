@@ -1,59 +1,63 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <recommend-view :recommends="recommends"></recommend-view>
-    <feature-view></feature-view>
-    <tab-control :titles="['流行','新款','精选']" class="tab-control"></tab-control>
-    <goods-list :goods="goods['pop'].list"></goods-list>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表1</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表1</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表1</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表</div>
-    <div>列表1</div>
+    <scroll>
+      <div class="scrollcontent">
+        <home-swiper :banners="banners"></home-swiper>
+        <recommend-view :recommends="recommends"></recommend-view>
+        <feature-view></feature-view>
+        <tab-control :titles="['流行','新款','精选']" class="tab-control" @tabcontrolclick="tabcontrolclick"></tab-control>
+        <goods-list :goods="showGoods"></goods-list>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表1</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表1</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表1</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表</div>
+        <div>列表1</div>
+      </div>
+    </scroll>
   </div>
 </template>
 
@@ -61,6 +65,7 @@
 import NavBar from 'components/common/navbar/NavBar.vue'
 import TabControl from 'components/content/tabControl/TabControl.vue'
 import GoodsList from 'components/content/goods/GoodsList.vue'
+import Scroll from 'components/common/scroller/Scroll.vue'
 
 import HomeSwiper from './childHome/HomeSwiper.vue'
 import RecommendView from './childHome/RecommendView.vue'
@@ -78,13 +83,15 @@ export default {
         'pop':{page:0,list:[]},
         'new':{page:0,list:[]},
         'sell':{page:0,list:[]}
-      }
+      },
+      currenttype:'pop',
     }
   },
   components:{
     NavBar,
     TabControl,
     GoodsList,
+    Scroll,
     HomeSwiper,
     RecommendView,
     FeatureView
@@ -95,22 +102,44 @@ export default {
     this.getHomeGoods('new');
     this.getHomeGoods('sell');
   },
+  computed:{
+    showGoods(){
+      return this.goods[this.currenttype].list;
+    }
+  },
   methods:{
+    //事件监听的方法
+    //根据监听tabcontrol点击的index（流行0，新款1，精选2）来决定当前的类型currenttype
+    tabcontrolclick(index){
+      console.log(index);
+      switch (index) {
+        case 0:
+          this.currenttype='pop';
+          break;
+        case 1:
+          this.currenttype='new';
+          break;
+        case 2:
+          this.currenttype='sell';
+          break;
+      }
+    },
+    //请求数据的方法
     getHomeMultidata(){
       getHomeMultidata().then(res=>{
         // console.log(res);
         //1.请求多个数据
         this.banners = res.data.banner.list;
-        console.log("请求多个数据");
-        console.log(res.data);
+        // console.log("请求多个数据");
+        // console.log(res.data);
         this.recommends = res.data.recommend.list;
       })
     },
     getHomeGoods(type){
       const page=this.goods[type].page+1;
       getHomeGoods(type,page).then(res=>{
-        console.log("请求商品数据");
-        console.log(res);
+        // console.log("请求商品数据");
+        // console.log(res);
         // 因为在我们加载对象的时候，用的是异步模式，
         // 即使promise立刻被处理返回，但是浏览器在开始加载对象的时候，
         // 这个对象还是没有定义，所以也就读不到属性
