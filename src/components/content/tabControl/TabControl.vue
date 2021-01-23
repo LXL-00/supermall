@@ -40,7 +40,7 @@ export default {
   display: flex;
   text-align: center;
   font-size: 15px;
-  height: 4%;
+  height: 44px;
   line-height: 35px;
   background-color: #fff;
   z-index: 9;

@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <!-- 占位，显示相应路由的页面 -->
-    <router-view></router-view>
+    <keep-alive exclude="Detail">
+      <router-view></router-view>
+    </keep-alive>
     <main-tab-bar></main-tab-bar>
   </div>
 </template>
