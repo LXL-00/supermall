@@ -32,3 +32,14 @@ export class detailShopInfo{
     this.goodsCount=shopInfo.cGoods;
   }
 }
+
+export class detailParams{
+  constructor(info,rule){
+    this.infoimg=info.images?info.images:'';
+    this.infokey=info.key;
+    this.infoset=info.set;
+    this.ruledisc=rule.disclaimer;
+    this.rulekey=rule.key;
+    this.ruletable=rule.tables;
+  }
+}

@@ -11,6 +11,8 @@
       <detail-swiper :topimgswiper="topimg"></detail-swiper>
       <detail-base-info :detailbaseinfogoods="detailgoods"></detail-base-info>
       <detail-shop-info :detailshopinfos="detailshop"></detail-shop-info>
+      <detail-goods-infos :detailinfo="detailgoodsmore" @imgloadtodetail="detailimgload"></detail-goods-infos>
+      <detail-param-info :detailparaminfos="detailparammore"></detail-param-info>
       <div>{{}}</div>
       <div>{{}}</div>
       <div>{{}}</div>
@@ -61,10 +63,12 @@ import DetailNavbar from 'views/detail/childDetail/DetailNavbar.vue'
 import DetailSwiper from 'views/detail/childDetail/DetailSwiper.vue'
 import DetailBaseInfo from 'views/detail/childDetail/DetailBaseInfo.vue'
 import DetailShopInfo from 'views/detail/childDetail/DetailShopInfo.vue'
+import DetailGoodsInfos from 'views/detail/childDetail/DetailGoodsInfos.vue'
+import DetailParamInfo from 'views/detail/childDetail/DetailParamInfo.vue'
 
 import Scroll from 'components/common/scroller/Scroll.vue'
 import BackTop from 'components/content/backtop/BackTop.vue'
-import {getDetail,detailGoodsInfo,detailShopInfo} from 'network/detail.js'
+import {getDetail,detailGoodsInfo,detailShopInfo,detailParams} from 'network/detail.js'
 
 export default {
   name:'Detail',
@@ -74,6 +78,8 @@ export default {
       topimg:[],
       detailgoods:{},
       detailshop:{},
+      detailgoodsmore:{},
+      detailparammore:{},
       setofftop:0,
       isshow:false,
       isshowdetailnavbar:false,
@@ -84,6 +90,8 @@ export default {
     DetailSwiper,
     DetailBaseInfo,
     DetailShopInfo,
+    DetailGoodsInfos,
+    DetailParamInfo,
     Scroll,
     BackTop,
     
@@ -92,17 +100,23 @@ export default {
     this.detailid=this.$route.params.iid;
     getDetail(this.detailid).then(res=>{
         console.log(res);
-        //获取轮播图数据
+        //1获取轮播图数据
         const data=res.result;
         this.topimg=data.itemInfo.topImages;
-        console.log(this.topimg);
-        //获取商品详情信息
+        //2获取商品详情信息
         this.detailgoods=new detailGoodsInfo(data.itemInfo,data.columns,data.shopInfo.services)
-        //获取商家信息
+        //3获取商家信息
         this.detailshop=new detailShopInfo(data.shopInfo);
+        //4获取商品详情信息
+        this.detailgoodsmore=data.detailInfo;
+        //5获取参数信息
+        this.detailparammore=new detailParams(data.itemParams.info,data.itemParams.rule);
       })
   },
   methods:{
+    detailimgload(){
+      this.$refs.scrollback.scrollrefresh();
+    },
     backtopclick(){
       //封装了方法 
       this.$refs.scrollback.backtopscroll(0,0,500);
@@ -111,7 +125,7 @@ export default {
       console.log("返回顶部");
     },
     scrollpositiondetail(position){
-      this.isshow=(-position.y)>200?true:false;
+      this.isshow=(-position.y)>1000?true:false;
       // this.isshowdetailnavbar=(-position.y)>this.setofftop?true:false;
     },
     scrollpullupdetail(){
