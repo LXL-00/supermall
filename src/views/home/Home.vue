@@ -40,6 +40,7 @@ import FeatureView from './childHome/FeatureView.vue'
 
 import {getHomeMultidata,getHomeGoods} from 'network/home.js'
 import {debounce} from 'common/utils/utils.js'
+import {imgRefrashMixin} from 'common/mixins.js'
 
 export default {
   name:'Home',
@@ -57,8 +58,10 @@ export default {
       setofftop:0,
       istabcontrolshow:false,
       savey:0,
+      
     }
   },
+  mixins:[imgRefrashMixin],
   components:{
     NavBar,
     TabControl,
@@ -86,16 +89,11 @@ export default {
     console.log("deactivated");
     this.savey=this.$refs.scrollback.getscrolly();
     console.log(this.savey);
+    //取消全局监听事件
+    this.$bus.$off('loadimgmix',this.itemimgmix);
   },
   mounted(){
-    //接收孙子组件的事件，然后使得孙子组件可以使用父组件中的对象
-    // this.$bus.$on('loadimghome',()=>{
-    //   //this.$refs.scrollback.scrollrefresh();
-    // })
-    const refresh=debounce(this.$refs.scrollback.scrollrefresh,500);
-    this.$bus.$on('loadimghome',()=>{
-      refresh();
-    })
+    console.log(imgRefrashMixin);
   },
   computed:{
     showGoods(){
@@ -118,8 +116,11 @@ export default {
           this.currenttype='sell';
           break;
       }
-      this.$refs.tabcontrolref1.currentindex=index;
-      this.$refs.tabcontrolref2.currentindex=index;
+      if(this.$refs.tabcontrolref1!==undefined){
+        this.$refs.tabcontrolref1.currentindex=index;
+        this.$refs.tabcontrolref2.currentindex=index;
+      }
+      
     },
     //请求数据的方法
     getHomeMultidata(){

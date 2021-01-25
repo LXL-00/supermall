@@ -29,6 +29,7 @@ export default {
   },
   methods:{
     imgload(){
+      //监听详情的图片加载完成
       if(++this.counter==this.imglength){
         this.$emit('imgloadtodetail')
       }

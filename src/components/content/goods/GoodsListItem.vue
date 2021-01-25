@@ -1,6 +1,6 @@
 <template>
 	<div class="goods-list-item" @click="goodsitemclick">
-		<img :src="goodsItem.show.img" class="goods-list-img" @load="loadimg">
+		<img :src="showimages" class="goods-list-img" @load="loadimg">
 		<div class="goods-list-text">
 			<div class="goods-list-title">{{goodsItem.title}}</div>
 			<div class="goods-list-price">
@@ -22,10 +22,15 @@
 				}
 			}
 		},
+		computed:{
+			showimages(){
+				return this.goodsItem.image || this.goodsItem.show.img;
+			}
+		},
 		methods:{
 			loadimg(){
 				//当孙子组件想要与父组件进行通信的话，可以使用事件总线方法，将孙子组件的时间发出$bus.$emit到父组件中
-				this.$bus.$emit("loadimghome");
+				this.$bus.$emit("loadimgmix");
 			},
 			goodsitemclick(){
 				console.log("详情页跳转");

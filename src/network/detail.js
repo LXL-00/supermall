@@ -9,6 +9,13 @@ export function getDetail(iid){
   })
 }
 
+export function getRecommend(){
+  return request({
+    url:'/recommend'
+  })
+}
+
+//商品（图片）详情信息类
 export class detailGoodsInfo{
   constructor(itemInfo,columns,services){
     this.title=itemInfo.title;
@@ -22,6 +29,7 @@ export class detailGoodsInfo{
   }
 }
 
+//店铺详情信息类
 export class detailShopInfo{
   constructor(shopInfo){
     this.logo=shopInfo.shopLogo;
@@ -33,6 +41,7 @@ export class detailShopInfo{
   }
 }
 
+//商品参数详情信息类
 export class detailParams{
   constructor(info,rule){
     this.infoimg=info.images?info.images:'';

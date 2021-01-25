@@ -13,46 +13,10 @@
       <detail-shop-info :detailshopinfos="detailshop"></detail-shop-info>
       <detail-goods-infos :detailinfo="detailgoodsmore" @imgloadtodetail="detailimgload"></detail-goods-infos>
       <detail-param-info :detailparaminfos="detailparammore"></detail-param-info>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
-      <div>{{}}</div>
+      <detail-comment-info :detailcommentinfos="detailcommentmore"></detail-comment-info>
+      <!-- <detail-recommend-info :detailrecommendinfos="detailrecommendmore"></detail-recommend-info> -->
+      <goods-list :goods="detailrecommendmore"></goods-list>
+
     </scroll>
     <back-top @click.native="backtopclick" v-show="isshow"></back-top>
   </div>
@@ -65,10 +29,17 @@ import DetailBaseInfo from 'views/detail/childDetail/DetailBaseInfo.vue'
 import DetailShopInfo from 'views/detail/childDetail/DetailShopInfo.vue'
 import DetailGoodsInfos from 'views/detail/childDetail/DetailGoodsInfos.vue'
 import DetailParamInfo from 'views/detail/childDetail/DetailParamInfo.vue'
+import DetailCommentInfo from 'views/detail/childDetail/DetailCommentInfo.vue'
+import DetailRecommendInfo from 'views/detail/childDetail/DetailRecommendInfo.vue'
 
 import Scroll from 'components/common/scroller/Scroll.vue'
 import BackTop from 'components/content/backtop/BackTop.vue'
-import {getDetail,detailGoodsInfo,detailShopInfo,detailParams} from 'network/detail.js'
+import GoodsList from 'components/content/goods/GoodsList.vue'
+
+import {getDetail,getRecommend,detailGoodsInfo,detailShopInfo,detailParams} from 'network/detail.js'
+
+import {debounce} from 'common/utils/utils.js'
+import {imgRefrashMixin} from 'common/mixins.js'
 
 export default {
   name:'Detail',
@@ -80,11 +51,15 @@ export default {
       detailshop:{},
       detailgoodsmore:{},
       detailparammore:{},
+      detailcommentmore:{},
+      detailrecommendmore:[],
       setofftop:0,
       isshow:false,
       isshowdetailnavbar:false,
+      
     }
   },
+  mixins:[imgRefrashMixin],
   components:{
     DetailNavbar,
     DetailSwiper,
@@ -92,30 +67,56 @@ export default {
     DetailShopInfo,
     DetailGoodsInfos,
     DetailParamInfo,
+    DetailCommentInfo,
+    DetailRecommendInfo,
     Scroll,
     BackTop,
+    GoodsList,
     
   },
   created(){
     this.detailid=this.$route.params.iid;
+    //获取商品详情信息
     getDetail(this.detailid).then(res=>{
         console.log(res);
         //1获取轮播图数据
-        const data=res.result;
-        this.topimg=data.itemInfo.topImages;
+        const datas=res.result;
+        this.topimg=datas.itemInfo.topImages;
         //2获取商品详情信息
-        this.detailgoods=new detailGoodsInfo(data.itemInfo,data.columns,data.shopInfo.services)
+        this.detailgoods=new detailGoodsInfo(datas.itemInfo,datas.columns,datas.shopInfo.services)
         //3获取商家信息
-        this.detailshop=new detailShopInfo(data.shopInfo);
+        this.detailshop=new detailShopInfo(datas.shopInfo);
         //4获取商品详情信息
-        this.detailgoodsmore=data.detailInfo;
+        this.detailgoodsmore=datas.detailInfo;
         //5获取参数信息
-        this.detailparammore=new detailParams(data.itemParams.info,data.itemParams.rule);
+        this.detailparammore=new detailParams(datas.itemParams.info,datas.itemParams.rule);
+        //6获取评论信息
+        if(datas.rate.cRate!==0){
+          this.detailcommentmore=datas.rate.list[0];
+        }
+        
+      })
+
+      //获取商品推荐信息
+      getRecommend().then(res=>{
+        console.log("商品推荐信息");
+        console.log(res);
+        this.detailrecommendmore=res.data.list;
       })
   },
+  mounted(){
+    
+  },
+  destroyed(){
+    //取消全局监听事件
+    this.$bus.$off('loadimgmix',this.itemimgmix);
+  },
   methods:{
+    //监听详情的图片加载完成
     detailimgload(){
-      this.$refs.scrollback.scrollrefresh();
+      // this.$refs.scrollback.scrollrefresh();
+      //改用mixins混入刷新
+      this.refresh();
     },
     backtopclick(){
       //封装了方法 
@@ -153,7 +154,7 @@ export default {
   background-color: #fff;
 }
 .detailscroll{
-  height:  960px;
+  height: 1000px;
   overflow: hidden;
 }
 </style>
