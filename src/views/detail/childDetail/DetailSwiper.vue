@@ -2,7 +2,7 @@
   <div class="detail-swiper">
     <swiper class="detail-swiperitem">
       <swiper-item v-for="items in topimgswiper">
-        <img :src="items" alt="" @load="swiperimgLoad">
+        <img v-lazy="items" alt="" @load="swiperimgLoad">
       </swiper-item>
     </swiper>
     

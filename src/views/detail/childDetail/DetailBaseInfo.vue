@@ -15,7 +15,7 @@
       <span class="info-service-item" 
             v-for="index in detailbaseinfogoods.services.length-1"
             :key="index">
-            <img :src="detailbaseinfogoods.services[index-1].icon">
+            <img v-lazy="detailbaseinfogoods.services[index-1].icon">
             <span>{{detailbaseinfogoods.services[index-1].name}}</span>
       </span>
     </div>

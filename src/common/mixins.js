@@ -1,4 +1,5 @@
 import {debounce} from 'common/utils/utils.js'
+import BackTop from 'components/content/backtop/BackTop.vue'
 
 export const imgRefrashMixin={
   data(){
@@ -19,5 +20,23 @@ export const imgRefrashMixin={
     
     this.$bus.$on('loadimgmix',this.itemimgmix)
     console.log('我是混入中的内容');
+  }
+}
+
+export const backtopMixins={
+  data(){
+    return{}
+  },
+  components:{
+    BackTop
+  },
+  methods:{
+    backtopclick(){
+      //封装了方法 
+      this.$refs.scrollback.backtopscroll(0,0,500);
+      //另一种方法，没有封装方法 ,scrollTo(x位置，y位置，花费时间)
+      //this.$refs.scrollback.bs.scrollTo(0,0,500);
+      console.log("返回顶部");
+    },
   }
 }

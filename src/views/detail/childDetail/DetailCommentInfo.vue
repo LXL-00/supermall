@@ -1,12 +1,12 @@
 <template>
-  <div class="detail-commentinfo">
+  <div class="detail-commentinfo" v-if="Object.keys(detailcommentinfos).length!==0">
     <div class="comenttitle">
       <span class="commentuer">用户评价</span>
       <span class="commentmore"> 更多</span>
     </div>
 
     <div class="commentusers">
-      <img class="cuserimg" :src="detailcommentinfos.user.avatar" alt="">
+      <img class="cuserimg" v-lazy="detailcommentinfos.user.avatar" alt="">
       <span class="cusername">{{detailcommentinfos.user.uname}}</span>
     </div>
 
@@ -18,7 +18,7 @@
       <div class="ccontents">{{detailcommentinfos.content}}</div>
       <div class="cimages">
         <div class="cimg" v-for="(imgitem,index) in detailcommentinfos.images" :key="index">
-          <img :src="imgitem">
+          <img v-lazy="imgitem">
         </div>
       </div>
       <div class="canswer">{{detailcommentinfos.explain}}</div>

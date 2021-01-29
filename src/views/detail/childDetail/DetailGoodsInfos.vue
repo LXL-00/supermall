@@ -1,10 +1,10 @@
 <template>
-  <div class="detail-goodsinfos" v-if="Object.keys(detailinfo).length!==0">
-    <div class="detail-goodsdesc">{{detailinfo.desc}}</div>
-    <div class="detail-goodsimg" v-for="items in detailinfo.detailImage">
+  <div class="detail-goodsinfos" v-if="Object.keys(detailinfos).length!==0">
+    <div class="detail-goodsdesc">{{detailinfos.desc}}</div>
+    <div class="detail-goodsimg" v-for="items in detailinfos.detailImage">
       <p class="detail-goodskey">{{items.key}}</p>
-      <div class="detail-goodslist" v-for="(itemsimg,index) in items.list" :key="index" @load="imgload">
-        <img :src="itemsimg" alt="">
+      <div class="detail-goodslist" v-for="(itemsimg,index) in items.list" :key="index">
+        <img v-lazy="itemsimg" alt="" @load="goodsimgload">
       </div>
     </div>
   </div>
@@ -14,7 +14,7 @@
 export default {
   name:'DetailGoodsInfos',
   props:{
-    detailinfo:{
+    detailinfos:{
       type:Object,
       default() {
         return {}
@@ -28,17 +28,18 @@ export default {
     }
   },
   methods:{
-    imgload(){
+    goodsimgload(){
       //监听详情的图片加载完成
-      if(++this.counter==this.imglength){
-        this.$emit('imgloadtodetail')
-      }
+      this.$emit('imgloadtodetail')
+    //   if(++this.counter==this.imglength){
+        
+    //   }
     },
   },
   watch:{
-    detailinfowatch(){
-      this.imlength=detailinfo.detailImage[0].list.length;
-    }
+    // detailinfowatch(){
+    //   this.imlength=this.detailinfos.detailImage[0].list.length;
+    // }
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="detail-recommendinfo" v-if="Object.keys(detailrecommendinfos).length !== 0">
     <div class="detail-goods-list" v-for="(item,index) in detailrecommendinfos" :key="index">
-		  <img :src="item.image" class="detailgoods-list-img">
+		  <img v-lazy="item.image" class="detailgoods-list-img">
 		  <div class="detailgoods-list-text">
 			  <div class="detailgoods-list-title">{{item.title}}</div>
 			  <div class="detailgoods-list-price">

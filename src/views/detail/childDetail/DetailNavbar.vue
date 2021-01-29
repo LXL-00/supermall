@@ -36,6 +36,8 @@ export default {
   methods:{
     titleitemclick(index){
       this.currentindex=index;
+      //点击标题，滚动到对应的内容
+      this.$emit('titleitemtodetail',index);
     },
     detailbackclick(){
       this.$router.back();
@@ -47,6 +49,9 @@ export default {
 </script>
 
 <style scoped>
+.detail-nav-bar{
+  height: 7.5%;
+}
 .detailitem{
   display: flex;
 }

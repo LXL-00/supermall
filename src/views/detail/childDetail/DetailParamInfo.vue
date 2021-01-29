@@ -26,7 +26,7 @@
     </div>
     <div class="detail-infoimg" v-if="detailparaminfos.infoimg.length!==0">
       <div v-for="(imgitem,indeximg) in detailparaminfos.infoimg">
-        <img :src="imgitem" alt="">
+        <img v-lazy="imgitem" alt="">
       </div>
     </div>
   </div>

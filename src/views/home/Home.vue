@@ -32,7 +32,7 @@ import NavBar from 'components/common/navbar/NavBar.vue'
 import TabControl from 'components/content/tabControl/TabControl.vue'
 import GoodsList from 'components/content/goods/GoodsList.vue'
 import Scroll from 'components/common/scroller/Scroll.vue'
-import BackTop from 'components/content/backtop/BackTop.vue'
+
 
 import HomeSwiper from './childHome/HomeSwiper.vue'
 import RecommendView from './childHome/RecommendView.vue'
@@ -40,7 +40,7 @@ import FeatureView from './childHome/FeatureView.vue'
 
 import {getHomeMultidata,getHomeGoods} from 'network/home.js'
 import {debounce} from 'common/utils/utils.js'
-import {imgRefrashMixin} from 'common/mixins.js'
+import {imgRefrashMixin,backtopMixins} from 'common/mixins.js'
 
 export default {
   name:'Home',
@@ -61,13 +61,12 @@ export default {
       
     }
   },
-  mixins:[imgRefrashMixin],
+  mixins:[imgRefrashMixin,backtopMixins],
   components:{
     NavBar,
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
     HomeSwiper,
     RecommendView,
     FeatureView
@@ -94,6 +93,7 @@ export default {
   },
   mounted(){
     console.log(imgRefrashMixin);
+    
   },
   computed:{
     showGoods(){
@@ -150,13 +150,7 @@ export default {
         this.$refs.scrollback.scrollfinishPullUp();
       })
     },
-    backtopclick(){
-      //封装了方法 
-      this.$refs.scrollback.backtopscroll(0,0,500);
-      //另一种方法，没有封装方法 ,scrollTo(x位置，y位置，花费时间)
-      //this.$refs.scrollback.bs.scrollTo(0,0,500);
-      console.log("返回顶部");
-    },
+    
     scrollpositionhome(position){
       this.isshow=(-position.y)>1000?true:false;
       this.istabcontrolshow=(-position.y)>this.setofftop?true:false;
@@ -182,7 +176,7 @@ export default {
   margin-left: -8px;
   margin-right: -8px;
   margin-top: -10px;
-  
+  height: 100vh;
 }
 .home-nav{
   /* margin-top: -5px; */
@@ -202,7 +196,8 @@ export default {
 }
 .scrollcontent{
   overflow: hidden;
-  height: 960px;
+  /* height: 960px; */
+  height: calc(100% - 44px - 54px);
   margin-top: 44px;
   margin-bottom: 54px;
 }
